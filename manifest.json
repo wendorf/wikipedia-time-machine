@@ -3,7 +3,7 @@
 
   "name": "Wikipedia Time Machine",
   "description": "View Wikipedia content from a specific point in time",
-  "version": "0.2",
+  "version": "0.3",
 
   "background": {
     "scripts": ["background.js"]
