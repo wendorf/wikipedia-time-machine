@@ -5,11 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
   elements = {
     travelOn: document.getElementById('travel-on'),
     travelDate: document.getElementById('travel-date'),
-    travelDateRow: document.getElementById('travel-date-row')
+    travelMachine: document.getElementById('travel-machine'),
   };
 
-  chrome.storage.sync.get({travelDate: '2010-01-01', travelOn: false}, function (result) {
+  chrome.storage.sync.get({travelDate: '2010-01-01', travelOn: false, travelMachine: "wikipedia"}, function (result) {
     state = result;
+    syncUI();
+  });
+
+  elements.travelOn.addEventListener('change', () => {
+    syncState();
     syncUI();
   });
 
@@ -17,16 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     syncState();
   });
 
-  elements.travelOn.addEventListener('change', () => {
+  elements.travelMachine.addEventListener('change', () => {
     syncState();
-    syncUI();
-  });
+  })
 });
 
 function syncState() {
   state = {
     travelDate: elements.travelDate.value,
-    travelOn: elements.travelOn.checked
+    travelOn: elements.travelOn.checked,
+    travelMachine: elements.travelMachine.options[elements.travelMachine.options.selectedIndex].value
   };
   chrome.storage.sync.set(state);
 }
@@ -37,9 +42,15 @@ function syncUI() {
   elements.travelDate.value = state.travelDate;
   elements.travelDate.disabled = !state.travelOn;
 
-  if (state.travelOn) {
-    elements.travelDateRow.classList.remove("disabled");
-  } else {
-    elements.travelDateRow.classList.add("disabled");
-  }
+  elements.travelMachine.disabled = !state.travelOn;
+
+  Array.from(document.getElementsByClassName('travel-row')).forEach((row) => {
+    if (state.travelOn) {
+      row.classList.remove("disabled");
+    } else {
+      row.classList.add("disabled");
+    }
+  });
+
+  Array.from(elements.travelMachine.options).find((o) => o.value === state.travelMachine).selected = true
 }

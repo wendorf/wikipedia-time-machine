@@ -14,7 +14,7 @@
   },
 
   "permissions": [
-    "*://*.wikipedia.org/",
+    "<all_urls>",
     "storage",
     "webRequest",
     "webRequestBlocking"
